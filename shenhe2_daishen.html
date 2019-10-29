@@ -21,13 +21,55 @@
 	  //几个参数需要注意一下
 		  type: "GET",//方法类型
 		  dataType: "json",//预期服务器返回的数据类型
+		  async: true,//请求是否异步，默认为异步
 		  url: "http://127.0.0.1:8080/findInfoById" ,//url
 		  data:{
 			  id:C2,
 		  },
 		  success: function (result) {
-			data=result.data;
-			console.log(data)
+			userid=result.data.userid;
+			$("#userid").html(userid); 
+			typeid=result.data.typeid;
+			console.log(typeid);
+			
+			name=result.data.name;
+			$("#name").html(name); 
+			profession=result.data.profession;
+			$("#profession").html(profession); 
+			education=result.data.education;
+			$("#education").html(education); 
+			honor=result.data.honor;
+			$("#honor").html(honor); 
+			skill=result.data.skill;
+			$("#skill").html(skill); 
+			technology=result.data.technology;
+			$("#technology").html(technology); 
+			patent=result.data.patent;
+			$("#patent").html(patent); 
+			paper=result.data.paper;
+			$("#paper").html(paper); 
+			professor=result.data.professor;
+			$("#professor").html(professor); 
+			point=result.data.point;
+			$("#point").html(point); 
+			$.ajax({
+			//几个参数需要注意一下
+					  type: "GET",//方法类型
+					  dataType: "json",//预期服务器返回的数据类型
+					  url: "http://127.0.0.1:8080/findTypeById" ,//url
+					  data:{
+						   id:typeid,
+					  },
+					   success: function (res) {
+						 console.log(res);
+						 typeName= res.data.type+res.data.professionF+res.data.professionS;
+						 console.log(typeName);
+						 $("#typeName").html(typeName); 
+					   },
+					   error : function() {
+					   			  alert("异常！");
+					   }
+				});
 		  },
 		  error : function() {
 			  alert("异常！");
@@ -79,24 +121,43 @@
 		</fieldset>
 		
 		 
-		<table class="layui-table" lay-data="{url:'/test/table/demo2.json?v=3', cellMinWidth: 80, page: true}">
+		<table class="layui-table">
 		  <thead>
 			  
 		    <tr>
 				
-		      <th colspan="6" lay-data="{field:'username', width:80}">姓名ABC</th>
+		      <th colspan="6" >姓名：<span  id="name"></span></th>
 		      
 		    </tr>
-		    <tr>
-		      <th colspan="6" lay-data="{field:'person', width:80}">技术人才</th>
-		    </tr>
-		    <tr>
-				<th lay-data="{checkbox:true, fixed:'left'}"></th>
-		      <th rowspan="2" lay-data="{field:'category',align: 'center'}">类别</th>
-		      <th lay-data="{field:'level',align: 'center'}">级别</th>
-		      <th lay-data="{field:'score',align: 'center'}">分值</th>
-			  <th  lay-data="{fixed: 'right', width: 160, align: 'center', toolbar: '#barDemo'}">操作</th>
-		      <th lay-data="{field:'score',align: 'center'}">备注</th>
+			<tr>
+			<th colspan="6" >申请岗位：<span  id="typeName"></span></th>
+			</tr>
+			<tr>
+			<th colspan="6" >学历：<span  id="education"></span></th>
+			</tr>
+			<tr>
+			  <th colspan="6" >职称：<span  id="profession"></span></th>
+			</tr>
+			<tr>
+			  <th colspan="6" >荣誉：<span  id="honor"></span></th>
+			</tr>
+			<tr>
+			  <th colspan="6" >技能：<span  id="skill"></span></th>
+			</tr>
+			<tr>
+			  <th colspan="6" >科技进步奖：<span  id="technology"></span></th>
+			</tr>
+			<tr>
+			  <th colspan="6" >专利：<span  id="patent"></span></th>
+			</tr>
+			<tr>
+			  <th colspan="6" >论文著作：<span  id="paper"></span></th>
+			</tr>
+			<tr>
+			  <th colspan="6" >专业认证：<span  id="professor"></span></th>
+			</tr>
+			<tr>
+			  <th colspan="6" >总分：<span  id="point"></span></th>
 			</tr>
 		  </thead>
 		</table>
