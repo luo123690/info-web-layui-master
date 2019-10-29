@@ -51,3 +51,6 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
     text-align:center;
     background-color: #fff;
 }
+.qi{
+	width: 20%;position:absolute; left:17px;margin-top: 10px;
+}

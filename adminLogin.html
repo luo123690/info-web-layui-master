@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>北京联通EAM平台—人才申报系统</title>
+<link rel="icon" href="images/favicon.ico" type="image/x-icon"/><!--图标-->
+	
+<link href="css/index.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="layui/css/layui.css">
+<script src="layui/layui.js"></script>
+<script>
+		layui.use(['layer', 'form', 'element'], function(){
+		  var $ = layui.$; //重点处
+		  var layer = layui.layer;
+		  var form = layui.form;
+		  var element = layui.element;
+		   window.login = function(){
+		      //JS代码
+				  $.ajax({
+				  //几个参数需要注意一下
+					  type: "POST",//方法类型
+					  dataType: "json",//预期服务器返回的数据类型
+					  url: "http://127.0.0.1:8080/adminLogin" ,//url
+					  data: $('#form1').serialize(),
+					  success: function (result) {
+						  console.log(result);//打印服务端返回的数据(调试用)
+						  if (result.code == 200) {
+								
+								localStorage.setItem("adminToken",result.token);
+								alert("登陆成功");
+								window.location.href='shenhe1_daishen.html';
+						  }else if(result.code==201){
+							  localStorage.setItem("adminToken",result.token);
+							  alert("登陆成功");
+							  window.location.href='shenhe1_daishen.html';
+						  }
+							else
+								alert("登陆失败！");
+					  },
+					  error : function() {
+						  alert("异常！");
+					  }
+				  });
+				  return false;
+		      }
+		  });
+</script>
+</head>
+
+<body>
+ 
+<div>
+<div>
+<img  src = "images/logo.png"  class="logo" >
+</div>
+	
+<div style=" position: fixed;top: 45%;left: 35%; text-align: center;">
+<form id="form1" class="layui-form" onsubmit="return false" action="##" method="post">
+  <div class="layui-form-item">  
+    <label class="layui-form-label"><i class="layui-icon layui-icon-username"></i> 账号</label>
+    <div class="layui-input-block" style="width: 57%;">
+      <input type="text" id="username" value="" name="username" required  lay-verify="required" placeholder="请输入OA账号" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+	  
+    <label class="layui-form-label"><i class="layui-icon layui-icon-password" ></i> 密码</label>
+    <div class="layui-input-inline" style="width: 57%;">
+      <input type="password" id="password" name="password" value="" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+    </div>
+   <!-- <div class="layui-form-mid layui-word-aux">8-20字符，注意大小写</div>-->
+  </div>
+	
+	 <div class="layui-form-item">
+    <div class="layui-input-block" style="margin-left:0;min-height:0">
+      <button class="layui-btn" lay-submit type="submit" onclick="login()">登录</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+	
+	</form>
+</div>
+</div>
+ 
+
+<script>
+//Demo
+layui.use('form', function(){
+  var form = layui.form
+  
+  
+  //监听提交
+  form.on('submit(formDemo)', function(data){
+    console.log(data);
+  });
+  
+  
+ 
+  
+});
+  //实例化一个上传控件
+
+
+</script>
+</body>
+</html>

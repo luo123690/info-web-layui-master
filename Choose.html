@@ -10,6 +10,171 @@
 <link href="css/Choose.css" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="layui/css/layui.mobile.css">
 <link rel="stylesheet" href="layui/css/layui.css" media="all">
+<script src="layui/layui.all.js"></script>	
+<script src="layui/layui.js"></script>
+<script>
+	//重新渲染表单
+	window.renderForm=function(){
+	  layui.use('form', function(){
+	   var form = layui.form;//高版本建议把括号去掉，有的低版本，需要加()
+	   form.render();
+	  });
+	 }
+
+layui.use(['layer', 'form', 'element'], function(){
+	 	 layer.ready(function(){
+		  var $ = layui.$; //重点处
+		  var layer = layui.layer;
+		  var form = layui.form;
+		  var element = layui.element;
+		  var token = window.localStorage.getItem("token");
+		  var str;
+		  var data;
+		  var name;
+		 	if(token==null){
+		 		window.open("index.html");
+		 	}else{
+				$.ajax({
+					 headers: {
+						 "content-type": "application/x-www-form-urlencoded",
+						  "token":token,
+					 },
+					// contentType:'application/x-www-form-urlencoded',
+					  async:false,//请求是否异步，默认为异步
+					  type: "POST",//方法类型
+					  dataType: "json",//预期服务器返回的数据类型
+					  url: "http://127.0.0.1:8080/self" ,//url
+					  success: function (result) {
+						  console.log(JSON.stringify(result.data));//打印服务端返回的数据(调试用)
+						  name=result.data.name;	 
+					  },
+
+					  error : function() {
+						  alert("异常！");
+						  window.location.href='index.html';
+					  },
+				});
+		 	  $.ajax({
+				  
+		 	  //几个参数需要注意一下
+		 		// contentType:'application/x-www-form-urlencoded',
+		 		  async: true,//请求是否异步，默认为异步
+		 		  type: "GET",//方法类型
+		 		  dataType: "json",//预期服务器返回的数据类型
+		 		  url: "http://127.0.0.1:8080/findType" ,//url
+		 		  success: function (result) {
+		 			  // console.log(JSON.stringify(result.data));//打印服务端返回的数据(调试用)
+					  data=result.data;
+					  console.log(data.length); 
+					   $.each(data, function (index, item) {
+					   $('#type_type').append(new Option(item, index));// 下拉菜单里添加元素
+					  });
+						renderForm();
+						console.log($("#type_type").length);
+		 		  },
+		 		  error : function() {
+		 			  alert("异常！");
+		 			  window.location.href='index.html';
+		 		  }
+		 	  });
+			      form.on('select(type_type)', function(data){ //no是那个lay-filter的值
+					 $("#professionF").empty();
+					 var type=  $('#type_type option:selected').text();
+						console.log(type)
+						$.ajax({
+							url: "http://127.0.0.1:8080/findProfessionF" ,//url
+                            type: "get",
+							dataType : "json",
+							data:{
+								type:type
+							},
+                            contentType : "application/json",
+                            async: false,//同步
+                         success: function (result) {
+							
+		 			  // console.log(JSON.stringify(result.data));//打印服务端返回的数据(调试用)
+							  data=result.data;
+							  console.log(data); 
+							   $.each(data, function (index, item) {
+							   $('#professionF').append(new Option(item, index));// 下拉菜单里添加元素
+							  });
+							// form.render('select');//最后记得渲染
+                        }
+                     });
+                      form.render('select');//最后记得渲染
+					
+                  });
+			      form.on('select(professionF)', function(data){ //no是那个lay-filter的值
+					 $("#professionS").empty();
+					 var professionF=  $('#professionF option:selected').text();
+						console.log(professionF)
+						$.ajax({
+							url: "http://127.0.0.1:8080/findProfessionS" ,//url
+                            type: "get",
+                            dataType : "json",
+							data:{
+								professionF:professionF
+							},
+                            contentType : "application/json",
+                            async: false,//同步
+                         success: function (result) {
+							
+							console.log("111111111111"+JSON.stringify(result.data));//打印服务端返回的数据(调试用)
+							  data=result.data;
+							  console.log("111111111111"+data);
+							  if(data==""){
+								  var odiv=document.getElementById('professionS');
+								   odiv.style.display='none';
+							  }
+							   else{
+								   $.each(data, function (index, item) {
+								    $('#professionS').append(new Option(item, index));// 下拉菜单里添加元素
+								   });
+							   }
+							// form.render('select');//最后记得渲染
+                        }
+                     });
+                      form.render('select');//最后记得渲染
+                  });
+				window.submit= function(){
+				console.log(token)
+				
+				var professionF=  $('#professionF option:selected').text();
+				var professionS=  $('#professionS option:selected').text();
+				console.log(professionF,professionS)
+				$.ajax({
+					headers:{
+						 "content-type": "application/x-www-form-urlencoded",
+						 "token":token,
+					},
+					async: true,//同步
+					url: "http://127.0.0.1:8080/addUserInfo" ,//url
+	                type: "POST",//方法类型
+	                dataType : "json",
+					data:{
+						name:name,
+						professionF:professionF,
+						professionS:professionS
+					},
+	               	beforeSend: function(xhr) {
+				      xhr.setRequestHeader("Authorization", token);
+					},
+	                success: function (result) {
+						var id=result.data.id
+						url = "layuiTablePlug/SendM.html?id="+id;//此处跳转到b并且传递参数label
+						window.location.href = url;
+						console.log("111111111111"+JSON.stringify(result));//打印服务端返回的数据(调试用)
+	                },
+					error : function() {
+						alert("异常！");
+					}
+	             });
+			}
+		 	  return false;
+		 	}
+		})
+	})
+</script>
 </head>
 
 <body>
@@ -37,50 +202,26 @@
     <label class="layui-form-label"><i class="layui-icon layui-icon-form" style=" color:#f27700;"></i>  </label>
 		  
     <div class="layui-input-inline">
-      <select name="quiz">
-          <option value="">请选择您的一级专业</option>
-          <optgroup label="市场">
-            <option value="产业互联网产品专业">产业互联网产品专业</option>
-			<option value="市场营销">市场营销</option>
-            <option value="个人及家庭互联网产品专业">个人及家庭互联网产品专业</option>
-          </optgroup>
-          <optgroup label="技术">
-            <option value="IT">IT</option>
-            <option value="运行与维护">运行与维护</option>
-			<option value="网络建设">网络建设</option>
-          </optgroup>
+		<select id="type_type" name="type_type1"   lay-filter="type_type">
+			<option value=''>请选择</option>
         </select>
     </div>
     <div class="layui-input-inline">
-      <select name="quiz2">
+      <select name="quiz2" id="professionF" lay-filter="professionF">
         <option value="">请选择二级专业</option>
-        <option value="规划与架构">规划与架构</option>
-        <option  value="业务与需求">业务与需求</option>
-        <option value="研发与测试">研发与测试</option>
-        <option value="生产与运维">生产与运维</option>
-        <option value="大数据与云计算">大数据与云计算</option>
-		<option value="其他">其他</option>
-		  
-        <option value="网络监控">网络监控</option>
-        <option value="核心网">核心网</option>
-        <option value="移动无线网">移动无线网</option>
-        <option value="IT">IT</option>
-		 <option value="应急与安全">应急与安全</option>
-        <option value="动力配套、局房">动力配套、局房</option>
-        <option value="其他">其他</option>
-		  
-        <option value="建设管理与创新">建设管理与创新</option>
-        <option value="网络承接与接入">网络承接与接入</option>
-		 <option value="支撑及其他">支撑及其他</option>
       </select>
     </div>
-    
+    <div class="layui-input-inline">
+      <select name="quiz2" id="professionS" lay-filter="professionS">
+        <option value="">请选择三级专业</option>
+      </select>
+    </div>
 	</div>
 </form>
   
 <div class="layui-tab">
 	
-	 <a class="layui-btn layui-btn-lg layui-btn-primary layui-btn-radius con" href="SendM.html">下一页</a>
+	 <a class="layui-btn layui-btn-lg layui-btn-primary layui-btn-radius con" onclick="submit()" >下一页</a>
 </div>	
 	
 	<!--<div id="footer" class="layui-footer footer">
@@ -88,24 +229,22 @@
 	</div>-->
   
 		
-<script src="layui/layui.all.js"></script>	
-<script src="layui/layui.js" charset="utf-8"></script>
 
 <script>
-layui.use(['element','form', 'layedit'], function(){
-  var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
-  var form = layui.form
-  ,layer = layui.layer
+// layui.use(['element','form', 'layedit'], function(){
+//   var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+//   var form = layui.form
+//   ,layer = layui.layer
   
   
-  //监听导航点击
-  element.on('nav(demo)', function(elem){
-    //console.log(elem)
-    layer.msg(elem.text());
-  });
-});
+//   //监听导航点击
+//   element.on('nav(demo)', function(elem){
+//     //console.log(elem)
+//     layer.msg(elem.text());
+//   });
+// });
 	
-form.on('select()')
+// form.on('select()')
 
   
 	

@@ -7,6 +7,35 @@
   <link rel="stylesheet" href="layui/css/layui.css" >
   <link href="css/shenhe1.css" rel="stylesheet" type="text/css">
   <link rel="icon" href="images/favicon.ico" type="image/x-icon"/><!--图标-->
+  <script src="layui/layui.js" charset="utf-8"></script>
+  <script>
+  //JavaScript代码区域
+  layui.use(['element','table'], function(){
+    var element = layui.element;
+    var table = layui.table;
+	var $ = layui.$; //重点处
+	C1=window.location.href.split("?")[1];
+	C2=C1.split("=")[1];
+	    //JS代码
+	  $.ajax({
+	  //几个参数需要注意一下
+		  type: "GET",//方法类型
+		  dataType: "json",//预期服务器返回的数据类型
+		  url: "http://127.0.0.1:8080/findInfoById" ,//url
+		  data:{
+			  id:C2,
+		  },
+		  success: function (result) {
+			data=result.data;
+			console.log(data)
+		  },
+		  error : function() {
+			  alert("异常！");
+		  }
+	  });
+	  return false;
+  });
+  </script>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
@@ -82,14 +111,7 @@
     Copyright © 2019 Beijing Unicom
   </div>
 </div>
-<script src="layui/layui.js" charset="utf-8"></script>
-<script>
-//JavaScript代码区域
-layui.use(['element','table'], function(){
-  var element = layui.element;
-  var table = layui.table;
-});
-</script>
+
 
 <script id="barDemo" type="text/html">
   <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
@@ -119,7 +141,9 @@ layui.use('table', function(){
       });
     }
   });
+ 
 });
+
 </script>	   
 </body>
 </html>

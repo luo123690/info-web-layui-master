@@ -9,6 +9,23 @@
 <link rel="icon" href="images/favicon.ico" type="image/x-icon"/><!--图标-->
 <link href="css/SendM.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="layui/css/layui.css">
+<script src="layui/layui.js" charset="utf-8"></script>
+
+<script>
+layui.use(['element','form', 'layedit',"table"], function(){
+  var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+  var form = layui.form;
+  var layer = layui.layer;
+  var table = layui.table;
+  var $ = layui.$; //重点处
+  C1=window.location.href.split("?")[1];
+  C2=C1.split("=")[1];
+  
+  });
+
+	
+	
+</script>
 </head>
 
 <body>
@@ -61,26 +78,6 @@
   
 		
 	
-<script src="layui/layui.js" charset="utf-8"></script>
 
-<script>
-layui.use(['element','form', 'layedit',"table"], function(){
-  var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
-  var form = layui.form
-  ,layer = layui.layer;
-  var table = layui.table;
-  
-  //监听单元格编辑
-  table.on('edit(test3)', function(obj){
-    var value = obj.value //得到修改后的值
-    ,data = obj.data //得到所在行所有键值
-    ,field = obj.field; //得到字段
-    layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
-  });
-});
-
-	
-	
-</script>
 </body>
 </html>

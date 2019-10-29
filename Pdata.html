@@ -17,6 +17,7 @@
 	  var layer = layui.layer;
 	  var form = layui.form;
 	  var element = layui.element;
+
 	      //JS代码
 			  // layer.ready(function(){
 				 //  var token = window.localStorage.getItem("token")
@@ -31,6 +32,12 @@
 			  // });
 		layer.ready(function(){
 			var token = window.localStorage.getItem("token");
+			var username,sex,name,tel,age,college,profession,department,graduate,intro="";
+			
+			
+			if(token==null){
+				window.open("index.html");
+			}else{
 			console.log(token);
 			  $.ajax({
 				 headers: {
@@ -43,20 +50,45 @@
 				  type: "POST",//方法类型
 				  dataType: "json",//预期服务器返回的数据类型
 				  url: "http://127.0.0.1:8080/self" ,//url
-				  beforeSend: function(xhr) {
-				      xhr.setRequestHeader("Authorization", token);
-				  },
 				  success: function (result) {
-					  console.log(JSON.stringify(result));//打印服务端返回的数据(调试用)
+					  console.log(JSON.stringify(result.data));//打印服务端返回的数据(调试用)
+					  username=result.data.username;
+					  $("#username").html(username); 
+					  name=result.data.name;
+					  $("#name").html(name); 
+					  sex=result.data.sex;
+					  $("#sex").html(sex); 
+					  tel=result.data.tel;
+					  $("#tel").html(tel); 
+					  age=result.data.age;
+					  $("#age").html(age); 
+					  college=result.data.college;
+					  $("#college").html(college); 
+					  profession=result.data.profession;
+					  $("#profession").html(profession); 
+					  department=result.data.department;
+					  $("#department").html(department); 
+					  graduate=result.data.graduate;
+					  $("#graduate").html(graduate); 
+					  intro=result.data.intro;
+					  $("#intro").html(intro); 
 				  },
 
 				  error : function() {
 					  alert("异常！");
+					  window.location.href='index.html';
 				  }
 			  });
 			  return false;
-		});
+			}
+
+		});	
+		window.logout = function(){
+			window.localStorage.removeItem("token");
+			window.location.href='index.html';
+		}
 	  });
+
 </script>
 </head>
 
@@ -66,7 +98,7 @@
   <img src="images/logo.png" class="logo">
   <li class="layui-nav-item left" >
 	  <a href="">
-		  <button class="layui-btn" lay-submit lay-filter="formDemo">退出</button></a></li>
+		  <button class="layui-btn" lay-submit lay-filter="formDemo" onclick="logout()">退出</button></a></li>
 	<!--按钮监听没有设置好-->
 </ul>
 
@@ -75,7 +107,7 @@
 </div>
 	
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-  <legend>个人信息填写</legend>
+  <legend>个人信息确认</legend>
 </fieldset>
  
 <div class="layui-tab">
@@ -87,36 +119,29 @@
     <form class="layui-form" action="">
   <div class="layui-form-item">
     <label class="layui-form-label">账号</label>
-    <div class="layui-input-block" style="width: 20%;">
-      <input name="title" class="layui-input" type="text" placeholder="无法更改账号信息" autocomplete="off" lay-verify="title" disabled="">
+    <div id="username" class="layui-input-block" style="width: 20%;position:absolute; left:17px;margin-top: 10px;" >
     </div>
   </div>
 		
   <div class="layui-form-item">
-    <label class="layui-form-label">姓名</label>
-    <div class="layui-input-block" style="width: 20%;">
-      <input name="title" class="layui-input" type="text" placeholder="请输入姓名" autocomplete="off" lay-verify="title">
-    </div>
+    <label class="layui-form-label" >姓名</label>
+    <div id="name" class="layui-input-block" style="width: 20%;position:absolute; left:17px;margin-top: 10px;">    </div>
   </div>
  <div class="layui-form-item" pane="">
     <label class="layui-form-label">性别</label>
-    <div class="layui-input-block">
-      <input name="sex" title="男" type="radio" checked="" value="男">
-      <input name="sex" title="女" type="radio" value="女">
+    <div id="sex" class="layui-input-block" style="width: 20%;position:absolute; left:17px;margin-top: 10px;">
     </div>
 	<br>
 		
   <div class="layui-form-item">
     <label class="layui-form-label">年龄</label>
-    <div class="layui-input-block" style="width: 20%;">
-      <input name="title" class="layui-input" type="text" placeholder="请输入年龄" autocomplete="off" lay-verify="title">
+    <div id="age" class="layui-input-block" style="width: 20%;position:absolute; left:17px;margin-top: 10px;">
     </div>
   </div>
 		
   <div class="layui-form-item">
     <label class="layui-form-label">部门</label>
-    <div class="layui-input-block" style="width: 20%;">
-      <input name="title" class="layui-input" type="text" placeholder="请输入部门名称" autocomplete="off" lay-verify="title">
+    <div id="department" class="layui-input-block" style="width: 20%;position:absolute; left:17px;margin-top: 10px;">
     </div>
   </div>
 	</form>	
@@ -134,16 +159,14 @@
     <form class="layui-form" action="">
   
   <div class="layui-form-item">
-    <label class="layui-form-label">院校</label>
-    <div class="layui-input-block" style="width: 20%;">
-      <input name="title" class="layui-input" type="text" placeholder="请输入院校" autocomplete="off" lay-verify="title">
+    <label  class="layui-form-label">院校</label>
+    <div id="college"  class="layui-input-block" style="width: 20%;position:absolute; left:17px;margin-top: 10px;">
     </div>
   </div>
 		
   <div class="layui-form-item">
     <label class="layui-form-label">专业</label>
-    <div class="layui-input-block" style="width: 20%;">
-      <input name="title" class="layui-input" type="text" placeholder="请输入专业" autocomplete="off" lay-verify="title">
+    <div id="profession" class="layui-input-block" style="width: 20%;position:absolute; left:17px;margin-top: 10px;">
     </div>
   </div>
 		
@@ -156,14 +179,7 @@
     <li class="layui-this">个人简历</li>
   </ul>
   <div class="layui-tab-content">
-	  <div class="layui-upload">
-  <button class="layui-btn flo1" id="test1" type="button">上传图片</button>
-  <div class="layui-upload-list">
-    <blockquote class="layui-elem-quote layui-quote-nm  flo2">
-    预览图：
-    <div class="layui-upload-list" id="demo2" style="width: 50%;"></div>
- </blockquote>
-      </div>
+	  <div id="intro" class="layui-upload">
   </div>
  </div>
 
