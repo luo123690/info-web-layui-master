@@ -24,8 +24,6 @@
 		    ,scrollElem: '#LAY_demo1' //滚动条所在元素，一般不用填，此处只是演示需要。
 			,end: '<p style="color:red">木有了</p>'
 		    ,done: function(page, next){ //执行下一页的回调
-			
-		      console.log(list);
 		      //模拟数据插入
 		      setTimeout(function(){
 		        var lis = [];
@@ -40,18 +38,14 @@
 						  page:page,
 					  },
 					  success: function (result) {
-						  console.log(result);//打印服务端返回的数据(调试用)
 						  pages=result.pages;
 						  list=result.data;
-						  if(list.length==0){
-							flow.end();
-						  }
 					  },
 					  error : function() {
 						  alert("异常！");
 					  }
 				});
-		        for(var i = 0; i < 8; i++){
+		        for(var i = 0; i < list.length; i++){
 		          lis.push('<li'+' id='+list[i].id+' '+ 'onclick=check(this)'+'>'+ (list[i].name) +'</li>')
 		        }
 		        //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
@@ -61,25 +55,13 @@
 		    }
 		  });
 		  window.check = function(obj){
-   			//JS代码
-		  // $.ajax({
-		  // //几个参数需要注意一下
-			 //  type: "GET",//方法类型
-			 //  dataType: "json",//预期服务器返回的数据类型
-			 //  url: "http://127.0.0.1:8080/findInfoById" ,//url
-			 //  data: {
-				//   id:obj.id,
-				//   },
-			 //  success: function (result) {
-				  url = "shenhe2_daishen.html?id="+obj.id;//此处跳转到b并且传递参数label
-				  window.location.href = url;
-				  
-			  // },
-			  // error : function() {
-				 //  alert("异常！");
-			  // }
-		  // });
-					return false;
+			url = "shenhe2_daishen.html?id="+obj.id;//此处跳转到b并且传递参数label
+			window.location.href = url;
+			return false;
+		  }
+		  window.logout = function(){
+		  	window.localStorage.removeItem("adminToken");
+		  	window.location.href='adminLogin.html';
 		  }
   		});
   
@@ -95,7 +77,7 @@
     
     <ul class="layui-nav layui-layout-right">
       
-      <li class="layui-nav-item linshi"><a href="">退出</a></li>
+      <li class="layui-nav-item linshi" onclick="logout()">退出</li>
     </ul>
   </div>
   
@@ -110,8 +92,8 @@
         <li class="layui-nav-item">
           <a href="javascript:;">已完成</a>
           <dl class="layui-nav-child">
-			  <dd><a href="wancheng1_shichang.html">市场</a></dd>
-            <dd><a href="wancheng2_jishu.html">技术</a></dd>
+			  <dd><a href="wancheng1_jishu.html">市场</a></dd>
+            <dd><a href="wancheng1_jishu.html">技术</a></dd>
           </dl>
         </li>
        

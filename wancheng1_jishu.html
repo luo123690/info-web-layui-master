@@ -8,6 +8,83 @@
   <link rel="stylesheet" href="layui/css/layui.css"   media="all">
   <link href="css/shenhe1.css" rel="stylesheet" type="text/css">
   <link rel="icon" href="images/favicon.ico" type="image/x-icon"/><!--图标-->
+  <script src="layui/layui.js" charset="utf-8"></script>
+  <script>
+	 layui.use(['element', 'jquery','flow','form'], function () {
+	   var element = layui.element
+	   , $ = layui.jquery;
+	   var flow=layui.flow;
+	   var form=layui.form;
+	   var page=1;
+	   $(".menu_three").on("click", function () {
+		 
+		$(this).next().toggle();
+		$.each($(this).parent().siblings(), function (i, e) {
+		 $(e).find("ol").hide();;
+		});
+		 
+	   })
+	   $("ol").on("click", "li a", function () {
+		$.each($(this).parent().siblings(), function (i, e) {
+		 $(e).find("a").removeClass('three_this')
+		});
+		$(this).addClass('three_this'); // 添加当前元素的样式
+	   })
+	       $("dl dt").click(function() {
+			   
+			     // window.location.reload();
+				var list=[];
+				// console.log("bbbbbb"+list);
+	           var text = $(this).find("a").text();  // 找到当前点击的dt下的a标签并获取其内容
+			   console.log(text)
+				flow.load({
+			    elem: '#LAY_demo1' //流加载容器
+			    ,scrollElem: '#LAY_demo1' //滚动条所在元素，一般不用填，此处只是演示需要。
+			  	,end: '<p style="color:red">木有了</p>'
+			    ,done: function(page, next){ //执行下一页的回调
+			      //模拟数据插入
+					setTimeout(function(){
+						var lis = [];
+						$.ajax({
+					//几个参数需要注意一下
+							type: "GET",//方法类型
+							dataType: "json",//预期服务器返回的数据类型
+							async: false,//请求是否异步，默认为异步
+							url: "http://127.0.0.1:8080/findInfoList" ,//url
+							data: {
+							  professionF:text,
+							  professionS:text,
+							  isread:1,
+							  page:page,
+							},
+							success: function (result) {
+							  // console.log(result);//打印服务端返回的数据(调试用)
+							  pages=result.pages;
+							  list=result.data;
+							  console.log("aaaaa"+JSON.stringify(list));
+							  for(var i = 0; i < list.length; i++){
+							  	lis.push('<li'+' id='+list[i].id+' '+ 'onclick=check(this)'+'>'+ (list[i].name)+':'+(list[i].point)+'分' +'</li>')
+							  }
+							  $('#LAY_demo1').html(lis);
+							  next(lis.join(''), page <= pages);
+							  // window.location.reload();
+							},
+							error : function() {
+							  alert("异常！");
+							},
+						});
+					}, 500);
+				}
+			});
+
+	       });
+	   window.check = function(obj){
+	   		url = "wancheng_detial.html?id="+obj.id;//此处跳转到b并且传递参数label
+			window.location.href = url;
+	   		return false;
+	   }
+	});
+  </script>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
@@ -33,10 +110,52 @@
         </li>
         <li class="layui-nav-item">
           <a href="javascript:;">已完成</a>
-          <dl class="layui-nav-child">
-            <dd><a href="wancheng1_shichang.html">市场</a></dd>
-            <dd><a href="wancheng2_jishu.html">技术</a></dd>
-          </dl>
+		<dl class="layui-nav-child">
+       <dd>
+        <a href="javascript:;" class="menu_three ">市场</a>
+        <ol class="layui-nav-child" style="display: none;" >
+		 <dt><li name="pro1" ><a href="javascript:;">市场互联网产品专业</a></li></dt>
+         <dt><li name="pro1" ><a href="javascript:;">市场营销</a></li></dt>
+         <dt><li name="pro1" ><a href="javascript:;">个人及家庭互联网产品专业</a></li></dt>
+         <dt><li name="pro1" ><a href="javascript:;">其他</a></li></dt>
+        </ol>
+       </dd>
+       <dd><a href="javascript:;" class="menu_three">技术</a>
+        <ol class="layui-nav-child" style="display: none;">
+			<dd>
+				<a  id="pro1" href="javascript:;" class="menu_three ">IT</a>
+				<ol class="layui-nav-child" style="display: none;">
+					<dt><li><a href="javascript:;">规划与架构</a></li></dt>
+					<dt><li><a href="javascript:;">业务与需求</a></li></dt>
+					<dt><li><a href="javascript:;">研发与测试</a></li></dt>
+					<dt><li><a href="javascript:;">生产与运维</a></li></dt>
+					<dt><li><a href="javascript:;">大数据与云计算</a></li></dt>
+					<dt><li><a href="javascript:;">其他</a></li></dt>
+				</ol>
+			</dd>
+			<dd>
+				<a  id="pro1" href="javascript:;" class="menu_three ">运行与维护</a>
+				<ol class="layui-nav-child" style="display: none;">
+					<dt><li><a href="javascript:;">网络监控</a></li></dt>
+					<dt><li><a href="javascript:;">核心网</a></li></dt>
+					<dt><li><a href="javascript:;">移动无线网</a></li></dt>
+					<dt><li><a href="javascript:;">IT运维</a></li></dt>
+					<dt><li><a href="javascript:;">应急与安全</a></li></dt>
+					<dt><li><a href="javascript:;">动力配套、局房</a></li></dt>
+					<dt><li><a href="javascript:;">运维其他</a></li></dt>
+				</ol>
+			</dd>
+			<dd>
+				<a  id="pro1" href="javascript:;" class="menu_three ">网络建设</a>
+				<ol class="layui-nav-child" style="display: none;">
+					<dt><li><a href="javascript:;">建设管理与创新</a></li></dt>
+					<dt><li><a href="javascript:;">网络承载与接入</a></li></dt>
+					<dt><li><a href="javascript:;">支撑及其他</a></li></dt>
+				</ol>
+			</dd>
+        </ol>
+       </dd>
+      </dl>
         </li>
        
       </ul>
@@ -51,8 +170,6 @@
   		<fieldset class="layui-elem-field layui-field-title" ">
   		  <legend>已完成·技术人才</legend>
   		</fieldset>
-		
-		
 		<!-- 搜索框-->
 		<div class="demoTable" >
 		  搜索ID：
@@ -60,9 +177,10 @@
 		    <input name="id" class="layui-input" id="demoReload" autocomplete="off">
 		  </div>
 		  <button class="layui-btn" data-type="reload">搜索</button>
+		  <div lay-filter="test1" class="flow-default" id="LAY_demo1"></div>
 		</div>
+		
 		<!-- 表格-->
-		<table class="layui-hide" id="test"></table>
 		
   	</div>
 	
@@ -74,58 +192,7 @@
     Copyright © 2019 Beijing Unicom
   </div>
 </div>
-<script src="layui/layui.js" charset="utf-8"></script>
-<script>
-//JavaScript代码区域
-layui.use('element', function(){
-  var element = layui.element;
-  
-});
 
-var $ = layui.$, active = {
-    reload: function(){
-      var demoReload = $('#demoReload');
-      
-      //执行重载
-      table.reload('testReload', {
-        page: {
-          curr: 1 //重新从第 1 页开始
-        }
-        ,where: {
-          key: {
-            id: demoReload.val()
-          }
-        }
-      }, 'data');
-	  
-    }
-  };
-  
-  $('.demoTable .layui-btn').on('click', function(){
-    var type = $(this).data('type');
-    active[type] ? active[type].call(this) : '';
-  });
-});
-</script>
-
-<script>
-layui.use('table', function(){
-  var table = layui.table;
-  
-  table.render({
-    elem: '#test'
-    ,url:'/demo/table/user/'
-    ,cols: [[
-      {field:'score', width:80, title: '评分', sort: true}
-	  ,{field:'id', width:80, title: 'ID', sort: true}
-      ,{field:'username', width:80, title: '姓名'}
-      ,{field:'sex', width:80, title: '性别', sort: true}
-      ,{field:'sign', title: '备注', minWidth: 150}
-    ]]
-    ,page: true
-  });
-});
-</script>
 
 </body>
 </html>

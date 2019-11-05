@@ -10,12 +10,15 @@
   <script src="layui/layui.js" charset="utf-8"></script>
   <script>
   //JavaScript代码区域
-  layui.use(['element','table'], function(){
+  layui.use(['element','table', 'form'], function(){
     var element = layui.element;
     var table = layui.table;
+	var form = layui.form;
 	var $ = layui.$; //重点处
 	C1=window.location.href.split("?")[1];
 	C2=C1.split("=")[1];
+	console.log($('#form1').serialize())
+	var token=window.localStorage.getItem("adminToken");
 	    //JS代码
 	  $.ajax({
 	  //几个参数需要注意一下
@@ -36,20 +39,36 @@
 			$("#name").html(name); 
 			profession=result.data.profession;
 			$("#profession").html(profession); 
+			professionPoint=result.data.professionPoint;
+			$("#professionPoint").html(professionPoint); 
 			education=result.data.education;
 			$("#education").html(education); 
+			educationPoint=result.data.educationPoint;
+			$("#educationPoint").html(educationPoint); 
 			honor=result.data.honor;
 			$("#honor").html(honor); 
+			honorPoint=result.data.honorPoint;
+			$("#honorPoint").html(honorPoint);
 			skill=result.data.skill;
 			$("#skill").html(skill); 
+			skillPoint=result.data.skillPoint;
+			$("#skillPoint").html(skillPoint); 
 			technology=result.data.technology;
 			$("#technology").html(technology); 
+			technologyPoint=result.data.technologyPoint;
+			$("#technologyPoint").html(technologyPoint); 
 			patent=result.data.patent;
 			$("#patent").html(patent); 
+			patentPoint=result.data.patentPoint;
+			$("#patentPoint").html(patentPoint); 
 			paper=result.data.paper;
 			$("#paper").html(paper); 
+			paperPoint=result.data.paperPoint;
+			$("#paperPoint").html(paperPoint); 
 			professor=result.data.professor;
 			$("#professor").html(professor); 
+			professorPoint=result.data.professorPoint;
+			$("#professorPoint").html(professorPoint); 
 			point=result.data.point;
 			$("#point").html(point); 
 			$.ajax({
@@ -62,9 +81,13 @@
 					  },
 					   success: function (res) {
 						 console.log(res);
-						 typeName= res.data.type+res.data.professionF+res.data.professionS;
-						 console.log(typeName);
-						 $("#typeName").html(typeName); 
+						 if(res.data.professionS==null){
+							 typeName= res.data.type+"--"+res.data.professionF;
+						 }else{
+							 typeName= res.data.type+"--"+res.data.professionF+"--"+res.data.professionS;
+						 }
+
+							$("#typeName").html(typeName); 
 					   },
 					   error : function() {
 					   			  alert("异常！");
@@ -75,7 +98,33 @@
 			  alert("异常！");
 		  }
 	  });
-	  return false;
+	  
+	  window.audit = function(){
+		  $.ajax({
+		  //几个参数需要注意一下
+		  		  type: "POST",//方法类型
+		  		  dataType: "json",//预期服务器返回的数据类型
+				  headers: {
+				      "content-type": "application/x-www-form-urlencoded",
+				       "token":token,
+				  },
+		  		   url: "http://127.0.0.1:8080/updateUserPoint" ,//url
+		  		   data: {
+					   id:C2,
+					   point:document.getElementById("newPoint").value,
+					   remark:document.getElementById("remark").value,
+				   },
+		  		   success: function (res) {
+						 alert("审核成功！");
+						 console.log(res);
+		  		   },
+		  		   error : function() {
+		  		   			  alert("异常！");
+		  		   }
+		  	}); 
+			return false;
+	  }
+	 
   });
   </script>
 </head>
@@ -104,8 +153,8 @@
         <li class="layui-nav-item">
           <a href="javascript:;">已完成</a>
           <dl class="layui-nav-child">
-            <dd><a href="wancheng1_shichang.html">市场</a></dd>
-            <dd><a href="wancheng2_jishu.html">技术</a></dd>
+            <dd><a href="wancheng1_jishu.html">市场</a></dd>
+            <dd><a href="wancheng1_jishu.html">技术</a></dd>
           </dl>
         </li>
        
@@ -126,46 +175,54 @@
 			  
 		    <tr>
 				
-		      <th colspan="6" >姓名：<span  id="name"></span></th>
+		      <th colspan="8" >姓名：<span  id="name"></span></th>
 		      
 		    </tr>
 			<tr>
-			<th colspan="6" >申请岗位：<span  id="typeName"></span></th>
+			<th colspan="8" >申请岗位：<span  id="typeName"></span></th>
 			</tr>
 			<tr>
-			<th colspan="6" >学历：<span  id="education"></span></th>
+			<th colspan="6" >学历：<span  id="education"></span></th><th colspan="2" ><span  id="educationPoint"></span></th>
 			</tr>
 			<tr>
-			  <th colspan="6" >职称：<span  id="profession"></span></th>
+			  <th colspan="6" >职称：<span  id="profession"></span></th><th colspan="2" ><span  id="professionPoint"></span></th>
 			</tr>
 			<tr>
-			  <th colspan="6" >荣誉：<span  id="honor"></span></th>
+			  <th colspan="6" >荣誉：<span  id="honor"></span></th><th colspan="2" ><span  id="honorPoint"></span></th>
 			</tr>
 			<tr>
-			  <th colspan="6" >技能：<span  id="skill"></span></th>
+			  <th colspan="6" >技能：<span  id="skill"></span></th><th colspan="2" ><span  id="skillPoint"></span></th>
 			</tr>
 			<tr>
-			  <th colspan="6" >科技进步奖：<span  id="technology"></span></th>
+			  <th colspan="6" >科技进步奖：<span  id="technology"></span></th><th colspan="2" ><span  id="technologyPoint"></span></th>
 			</tr>
 			<tr>
-			  <th colspan="6" >专利：<span  id="patent"></span></th>
+			  <th colspan="6" >专利：<span  id="patent"></span></th><th colspan="2" ><span  id="patentPoint"></span></th>
 			</tr>
 			<tr>
-			  <th colspan="6" >论文著作：<span  id="paper"></span></th>
+			  <th colspan="6" >论文著作：<span  id="paper"></span></th><th colspan="2" ><span  id="paperPoint"></span></th>
 			</tr>
 			<tr>
-			  <th colspan="6" >专业认证：<span  id="professor"></span></th>
+			  <th colspan="6" >专业认证：<span  id="professor"></span></th><th colspan="2" ><span  id="professorPoint"></span></th>
 			</tr>
 			<tr>
-			  <th colspan="6" >总分：<span  id="point"></span></th>
+			  <th colspan="6" >总分：</th><th colspan="2" ><span  id="point"></span></th>
 			</tr>
 		  </thead>
 		</table>
 		
-		<a class="layui-btn layui-btn-lg layui-btn-primary layui-btn-radius con" href="shenhe1_daishen.html" >审核完成</a>
+
 			
 	</div>
-  </div>
+	<form id="form1" class="layui-form" onsubmit="return false" action="##" method="post">
+	
+	<div style="padding: 15px;margin-left: 5px;font-size:18px;">分数修改<input type="text" id="newPoint" placeholder="审核分数" style="height:30px;margin-left:15px;" ></div>
+	<div style="padding: 15px;margin-left: 5px;font-size:15px;">备注</div>
+
+	<textarea id="remark" style="width:90%;margin-left:25px;" placeholder="审核项目备注,若修改分数,则需在备注中记录"></textarea>
+	<a class="layui-btn layui-btn-lg layui-btn-primary layui-btn-radius con"  onclick="audit()" >审核完成</a>
+	</form>
+
   
   <div class="layui-footer">
     <!-- 底部固定区域 -->
@@ -174,37 +231,6 @@
 </div>
 
 
-<script id="barDemo" type="text/html">
-  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
-  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del">删除</a>
-</script>
   
-<script>
-layui.use('table', function(){
-  var table = layui.table; 
-  //监听单元格事件
-  table.on('tool(demoEvent)', function(obj){
-    var data = obj.data;
-    if(obj.event === 'setSign'){
-      layer.prompt({
-        formType: 2
-        ,title: '修改 分值 为 ['+ data.score +'] 的人才分值'
-        ,value: data.sign
-      }, function(value, index){
-        layer.close(index);
-        
-        //这里一般是发送修改的Ajax请求
-        
-        //同步更新表格和缓存对应的值
-        obj.update({
-          sign: value
-        });
-      });
-    }
-  });
- 
-});
-
-</script>	   
 </body>
 </html>

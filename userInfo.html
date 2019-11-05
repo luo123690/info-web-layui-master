@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport"
+		      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="stylesheet" href="layui/css/layui.css"  media="all">
+		<link rel="stylesheet" href="layui/css/layui.mobile.css">
+		<link href="css/userInfo.css" rel="stylesheet" type="text/css">
+		<link rel="icon" href="images/favicon.ico" type="image/x-icon"/><!--图标-->
+		<title>上传评审材料—北京联通EAM平台</title>
+		 <script src="layui/layui.all.js"></script>
+		 <script src="layui/layui.js" charset="utf-8"></script>
+		     <script>
+		     //Demo
+		     layui.use('form', function(){
+		       var form = layui.form;
+		       
+		       //监听提交
+		       form.on('submit(formDemo)', function(data){
+		         layer.msg(JSON.stringify(data.field));
+		         return false;
+		       });
+		     });
+		     </script>
+			 
+		    <script>
+		     layui.use('element', function(){
+		       var $ = layui.jquery
+		       ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+		       
+		       //触发事件
+		       var active = {
+		         tabAdd: function(){
+		           //新增一个Tab项
+		           element.tabAdd('demo', {
+		             title: '新选项'+ (Math.random()*1000|0) //用于演示
+		             ,content: '内容'+ (Math.random()*1000|0)
+		             ,id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
+		           })
+		         }
+		         ,tabDelete: function(othis){
+		           //删除指定Tab项
+		           element.tabDelete('demo', '44'); //删除：“商品管理”
+		           
+		           
+		           othis.addClass('layui-btn-disabled');
+		         }
+		         ,tabChange: function(){
+		           //切换到指定Tab项
+		           element.tabChange('demo', '22'); //切换到：用户管理
+		         }
+		       };
+		       
+		       $('.site-demo-active').on('click', function(){
+		         var othis = $(this), type = othis.data('type');
+		         active[type] ? active[type].call(this, othis) : '';
+		       });
+		       
+		       //Hash地址的定位
+		       var layid = location.hash.replace(/^#test=/, '');
+		       element.tabChange('test', layid);
+		       
+		       element.on('tab(test)', function(elem){
+		         location.hash = 'test='+ $(this).attr('lay-id');
+		       });
+		       
+		     });
+		     
+		     </script>
+			 
+		     <script>
+		     layui.use(['element','form', 'layedit'], function(){
+		       var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+		       var form = layui.form
+		       ,layer = layui.layer
+		       
+		       
+		       //监听导航点击
+		       element.on('nav(demo)', function(elem){
+		         //console.log(elem)
+		         layer.msg(elem.text());
+		       });
+		     });
+		     	
+		     </script>
+			 
+   <script>
+   	 layui.use(['layer', 'form', 'element'], function(){
+   		 	 layer.ready(function(){
+   			  var $ = layui.$; //重点处
+   			  var layer = layui.layer;
+   			  var form = layui.form;
+   			  var element = layui.element;
+			  C1=window.location.href.split("?")[1];
+			  C2=C1.split("=")[1];
+			  var token = window.localStorage.getItem("token");
+			 //   window.submit=function(){
+				// var education=window.document.getElementById("education").getAttribute("value");
+				// console.log(education);
+			 //   }
+			   
+   		layer.ready(function(){
+
+   			var point,intro="";
+
+   			if(token==null){
+   				window.location.href='index.html';
+				
+   			}
+			else{
+				var edu=[];
+				var education='';
+				var pro=[];
+				var profession='';
+				var hon=[];
+				var honor='';
+				var ski=[];
+				var skill='';
+				var tec=[];
+				var technology='';
+				var pat=[];
+				var patent='';
+				var pap=[];
+				var paper='';
+				var pror=[];
+				var professor='';
+				form.on('checkbox(education)', function(res){
+					if(res.elem.checked==true){
+					edu.push(res.value)
+					}
+					if(res.elem.checked==false){
+						edu = edu.filter(function(item) {
+					    return item != res.value;
+					});
+			        form.render();
+					}
+				});
+				form.on('checkbox(profession)', function(res){
+					if(res.elem.checked==true){
+					pro.push(res.value)
+					}
+					if(res.elem.checked==false){
+						pro = pro.filter(function(item) {
+					    return item != res.value;
+					});
+				    form.render();
+					}
+				});
+				form.on('checkbox(honor)', function(res){
+					if(res.elem.checked==true){
+					hon.push(res.value)
+					}
+					if(res.elem.checked==false){
+						hon = hon.filter(function(item) {
+					    return item != res.value;
+					});
+				    form.render();
+					}
+				});
+				form.on('checkbox(skill)', function(res){
+					if(res.elem.checked==true){
+					ski.push(res.value)
+					}
+					if(res.elem.checked==false){
+						ski = ski.filter(function(item) {
+					    return item != res.value;
+					});
+				    form.render();
+					}
+				});
+				form.on('checkbox(technology)', function(res){
+					if(res.elem.checked==true){
+					tec.push(res.value)
+					}
+					if(res.elem.checked==false){
+						tec = tec.filter(function(item) {
+					    return item != res.value;
+					});
+				    form.render();
+					}
+				});
+				form.on('checkbox(patent)', function(res){
+					if(res.elem.checked==true){
+					pat.push(res.value)
+					}
+					if(res.elem.checked==false){
+						pat = pat.filter(function(item) {
+					    return item != res.value;
+					});
+				    form.render();
+					}
+				});
+				form.on('checkbox(paper)', function(res){
+					if(res.elem.checked==true){
+					pap.push(res.value)
+					}
+					if(res.elem.checked==false){
+						pap = pap.filter(function(item) {
+					    return item != res.value;
+					});
+				    form.render();
+					}
+				});
+				form.on('checkbox(professor)', function(res){
+					if(res.elem.checked==true){
+					pror.push(res.value)
+					}
+					if(res.elem.checked==false){
+						pror = pror.filter(function(item) {
+					    return item != res.value;
+					});
+				    form.render();
+					}
+				});
+				window.submit = function(){
+					
+
+					var data={
+						id:'',
+						profession:'',
+						education:'',
+						honor:'',
+						skill:'',
+						technology:'',
+						patent:'',
+						paper:'',
+						professor:'',
+					};
+					data.id=C2;
+					data.education=edu.join(",");	
+					data.profession=pro.join(",");
+					data.honor=hon.join(",");
+					data.skill=ski.join(",");
+					data.technology=tec.join(",");
+					data.patent=pat.join(",");
+					data.paper=pap.join(",");
+					data.professor=pror.join(",");
+					// var inputTest1=document.getElementsByName("profession");
+					// for(var i=0;i<inputTest1.length;i++){
+				 // 			console.log(inputTest1[i].value);
+				 // 			data.profession+=inputTest1[i].value+',';
+					// }
+					// console.log(data.profession);
+					
+					// var inputTest2=document.getElementsByName("honor");
+					// for(var i=0;i<inputTest2.length;i++){
+					// 		console.log(inputTest2[i].value);
+					// 		data.honor+=inputTest2[i].value+',';
+					// }
+					// console.log(data.honor);
+					
+					// var inputTest3=document.getElementsByName("skill");
+					// for(var i=0;i<inputTest3.length;i++){
+					// 		console.log(inputTest3[i].value);
+					// 		data.skill+=inputTest3[i].value+',';
+					// }
+					// console.log(data.skill);
+					
+					// var inputTest4=document.getElementsByName("technology");
+					// for(var i=0;i<inputTest4.length;i++){
+					// 		console.log(inputTest4[i].value);
+					// 		data.technology+=inputTest4[i].value+',';
+					// }
+					// console.log(data.technology);
+					
+					// var inputTest5=document.getElementsByName("patent");
+					// for(var i=0;i<inputTest5.length;i++){
+					// 		console.log(inputTest5[i].value);
+					// 		data.patent+=inputTest5[i].value+',';
+					// }
+					// console.log(data.patent);
+					
+					// var inputTest6=document.getElementsByName("paper");
+					// for(var i=0;i<inputTest6.length;i++){
+					// 		console.log(inputTest6[i].value);
+					// 		data.paper+=inputTest6[i].value+',';
+					// }
+					// console.log(data.paper);
+					
+					// var inputTest7=document.getElementsByName("professor");
+					// for(var i=0;i<inputTest7.length;i++){
+					// 		console.log(inputTest7[i].value);
+					// 		data.professor+=inputTest7[i].value+',';
+					// }
+					// console.log(data.professor);
+					
+					$.ajax({
+					headers: {
+   				     "content-type": "application/x-www-form-urlencoded",
+   				     "token":token,
+							},
+   			  //几个参数需要注意一下
+   				// contentType:'application/x-www-form-urlencoded',
+				
+   				  async: false,//请求是否异步，默认为异步
+   				  type: "POST",//方法类型
+				  dataType: "json",//预期服务器返回的数据类型
+				  url: "http://127.0.0.1:8080/updateUserInfo",//url
+				  data:data,
+   				  success: function (result) {
+   					  console.log(JSON.stringify(result.data));//打印服务端返回的数据(调试用)
+   					  point=result.data.point;
+   					  // $("#point").html(point); 
+					  
+   					  layer.open({
+   					    title:false,					    
+						type:0,  					    
+						content:'您的大概分数是：'+point+'分。<br>最后的确定分数将5个工作日后揭晓，请您耐心等待。',				    
+						anim:2,				    
+						time:5000,			    
+						shadeClose:true,
+   					    // style: 'border:none;background:url(images/bg1.jpg); color:#000; font-size:16px; '
+   					    // btn:'好的',
+   					    //  yes: function(index, layero) {  
+   					    //                           window.location.href='page21.html';  
+   					    //                       }, 
+   					     
+   					  });
+					  setTimeout(function() {
+						  window.location.href='Pdata.html';
+					  }, 5000); 
+   				  },
+   
+   				  error : function() {
+   					  alert("异常！");
+   					  window.location.href='userInfo.html';
+   				  },
+   			  });
+   			}
+			return false;
+		}
+   
+   		});	
+   		window.logout = function(){
+   					window.localStorage.removeItem("token");
+   					window.location.href='index.html';
+   		}
+		window.postData = function(){
+				var formData = new FormData();
+				formData.append("fileName",$("#fileName")[0].files[0]);
+				formData.append("id",C2);
+				console.log(formData);
+				$.ajax({
+					url:'http://127.0.0.1:8080/uploadFile', /*接口域名地址*/
+					headers: {
+						  "token":token,
+					},
+					type:'post',
+					data: formData,
+					contentType: false,
+					processData: false,
+					success:function(res){
+						console.log(res.message);
+						alert("上传成功！");
+					},
+					error : function() {
+					  alert("异常！");
+					},
+				})
+				return false;
+			}
+		// 	return false;
+   		  });	
+	
+	});
+   
+   </script>
+	</head>
+	
+	<body>
+		<ul class="layui-nav layui-bg-green" >
+		  <img src="images/logo.png" class="logo">
+		  <li class="layui-nav-item left" >
+	
+				  <button class="layui-btn" lay-submit lay-filter="formDemo" onclick="logout()">退出</button>
+	
+		  </li>
+			<!--按钮监听没有设置好-->
+		</ul>
+		
+		<div class="layui-progress layui-progress-big jindu" lay-showPercent="true">
+		  <div class="layui-progress-bar layui-bg-orange" lay-percent="3/3"></div>
+		</div>
+			
+		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+		  <legend><b>选择申报专业——分类1</b> </legend>
+		</fieldset>
+		
+		 
+		<div class="layui-tab " >
+		  <ul class="layui-tab-title">
+		    <li class="layui-this">职称/职鉴</li>
+		    <li>学历/学位</li>
+		    <li>专利</li>
+		    <li>论文著作</li>
+		  </ul>
+		  <div class="layui-tab-content">
+			  
+		    <div class="layui-tab-item layui-show">
+		      <span style="margin-left: 8%;top: 4%;">
+				  <p style="margin-left: 8%;top: 4%;">&nbsp;初级30分，中级（技师）60分，高级（高级技师）及以上100分。<br>
+				  &nbsp;<i class="layui-icon layui-icon-rate-half"></i>  
+                   注：上传最高级材料信息即可，多份材料会选取其中的最高分值级别，来进行的计分。</p><br>
+			  </span>
+			  <form class="layui-form"  action="" >
+			  <div class="layui-input-block">
+			  <input type="checkbox" lay-filter="profession" name="profession" value="初级（技师）职称" title="初级 " checked>
+			  <input type="checkbox" lay-filter="profession" name="profession" value="中级（技师）职称" title="中级 "> 
+			  <input type="checkbox" lay-filter="profession" name="profession" value="高级（技师）职称" title="高级 "> 
+			  </div>
+			  </form>
+		    </div>
+			
+		    <div class="layui-tab-item">
+				<span style="margin-left: 8%;top: 4%;">
+								  <p style="margin-left: 8%;top: 4%;">&nbsp;本科/学士50分，研究生/硕士80分，博士100分。<br>
+								  &nbsp;<i class="layui-icon layui-icon-rate-half"></i>  
+				     注：上传最高级材料信息即可，多份材料会选取其中的最高分值级别，来进行的计分。</p><br>
+				</span>
+			  <form class="layui-form " id="education" action="" >
+			  <div class="layui-input-block" >
+			  <input type="checkbox" lay-filter="education"  value="本科（学士）学历" title="本科/学士 " >
+			  <input type="checkbox" lay-filter="education"  value="研究生（硕士）学历" title="研究生/硕士 "> 
+			  <input type="checkbox" lay-filter="education"  value="博士学历"    title="博士 "> 
+			 </div>
+			 </form>
+			</div>
+			
+		    <div class="layui-tab-item">
+				<div class="layui-tab-item layui-show">
+					  <span style="margin-left: 8%;top: 4%;">
+									  <p style="margin-left: 8%;top: 4%;">&nbsp;作为主要成员且获得与本专业相关的，目前有效专利，国家发明专利1项100分，实用新型专利1项50分。<br>
+									  &nbsp;<i class="layui-icon layui-icon-rate-half"></i>  
+						   注：参与评分最多两项,最高合计100分。</p><br>
+					  </span>
+				  <form class="layui-form" action="">
+				  <div class="layui-input-block">
+				  <input type="checkbox" lay-filter="patent"  name="patent" value="国家发明专利/项" title="国家发明专利 ">
+				  <input type="checkbox" lay-filter="patent"  name="patent" value="实用新型专利/项" name="" title="实用新型专利 "> 
+				  <br>
+				  </div>
+				  <div class="layui-input-block">
+				  <input type="checkbox" lay-filter="patent"  name="patent" value="国家发明专利/项" title="国家发明专利 " >
+				  <input type="checkbox" lay-filter="patent"  name="patent" value="实用新型专利/项" title="实用新型专利 "> 
+				  </div>
+				  </form>
+				</div>
+			</div>
+				
+		    <div class="layui-tab-item">
+		    	<div class="layui-tab-item layui-show">
+		    		  <span style="margin-left: 8%;top: 4%;">
+		    						  <p style="margin-left: 8%;top: 4%;">&nbsp;作为主要撰写人在国际、国内刊物上发表与本专业相关的论文，或与本专业相关的正式出版著作。<br>
+										1.在核心期刊发表论文或被SCI、EI、ISTP等收录的论文，第一作者每篇100分，合著每篇80。<br>
+										2.在CN期刊上发表的论文，第一作者每篇50分，合著每篇30分。<br>
+										3.著作第一主编每部80，副主编或编委每部40分。
+										<br>
+		    						  &nbsp;<i class="layui-icon layui-icon-rate-half"></i>  
+		    			   注：参与评分最多三篇或部，最高合计100分。</p><br>
+		    		  </span>
+		    	  <form class="layui-form" action="">
+		    	  <div class="layui-input-block">
+		    	  <input type="checkbox" lay-filter="paper"  name="paper" value="著作第一主编/部" title="著作第一主编/部">
+		    	  <input type="checkbox" lay-filter="paper" name="paper" value="著作副主编或编委/部" title="著作副主编或编委/部"> 
+		    	  <input type="checkbox" lay-filter="paper" name="paper" value="CN期刊合著/篇" title="CN期刊合著/篇" >
+		    	  <input type="checkbox" lay-filter="paper" name="paper" value="CN期刊第一作者/篇" title="CN期刊第一作者/篇"> 
+		    	  <br>
+		    	  </div>
+		    	  <div class="layui-input-block">
+		    	  <input type="checkbox" lay-filter="paper" name="paper" value="核心期刊发表论文或被SCI、EI、ISTP等收录的合著/篇" title="核心期刊发表论文或被SCI、EI、ISTP等收录的合著/篇 ">
+		    	  <input type="checkbox" lay-filter="paper" name="paper" value="核心期刊发表论文或被SCI、EI、ISTP等收录的第一作者/篇" title="核心期刊发表论文或被SCI、EI、ISTP等收录的第一作者/篇 "> 
+		    	  </div>
+		    	  </form>
+		    	</div>
+		    </div>
+		  
+		</div>
+		
+		
+		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 70px;">
+		  <legend><b>选择申报专业——分类2 </b></legend>
+		</fieldset>
+		
+		<div class="layui-tab" >
+				  <ul class="layui-tab-title">
+				    <li class="layui-this">荣誉奖章</li>
+				    <li>技能竞赛</li>
+				    <li>科技进步、创新奖</li>
+				    <li>专业认证或资质</li>
+				  </ul>
+				  <div class="layui-tab-content"style="height: 30%;">
+				  			  
+				  		    <div class="layui-tab-item layui-show">
+				  		    	<div class="layui-tab-item layui-show">
+				  		    		  <span style="margin-left: 8%;top: 4%;">
+				  		    						  <p style="margin-left: 8%;top: 4%;">&nbsp;1.地、厅、省公司级技术能手、五一劳动奖章、劳动模范（先进工作者、标兵）30分。<br>
+															&nbsp;2.省、部、集团级技术能手、五一劳动奖章、劳动模范（先进工作者、标兵）60分。<br>
+															&nbsp;3.国家级技术能手、五一劳动奖章、劳动模范（先进工作者、标兵）100分。
+													  <br>
+				  		    						  &nbsp;<i class="layui-icon layui-icon-rate-half"></i>  
+				  		    			   注：参与评分的奖项最多三项,最高合计100分。</p><br>
+				  		    		  </span>
+				  		    	  <form class="layui-form" action="" method="post">
+									  
+								  <div class="layui-input-block">
+								  <input type="checkbox" lay-filter="honor" name="honor" value="地厅省公司级技术能手、五一劳动奖章、劳动模范、先进工作者、标兵荣誉奖章" title="地厅省公司级技术能手、五一劳动奖章、劳动模范、先进工作者、标兵荣誉奖章 ">
+								  <br>
+								  </div>
+				  		    	  <div class="layui-input-block">
+				  		    	  <input type="checkbox" name="honor" lay-filter="honor" value="地厅省公司级技术能手、五一劳动奖章、劳动模范、先进工作者、标兵荣誉奖章" title="地厅省公司级技术能手、五一劳动奖章、劳动模范、先进工作者、标兵荣誉奖章 ">
+				  		    	  <br>
+				  		    	  </div>
+								  <div class="layui-input-block">
+								  <input type="checkbox" name="honor" lay-filter="honor" value="地厅省公司级技术能手、五一劳动奖章、劳动模范、先进工作者、标兵荣誉奖章" title="地厅省公司级技术能手、五一劳动奖章、劳动模范、先进工作者、标兵荣誉奖章 ">
+								  <br>
+								  </div>
+									  
+								  <div class="layui-input-block">
+								  <input type="checkbox" name="honor" lay-filter="honor" value="省部集团级技术能手、五一劳动奖章、劳动模范、先进工作者、标兵荣誉奖章" title="省部集团级技术能手、五一劳动奖章、劳动模范、先进工作者、标兵荣誉奖章 "> 
+								  </div>
+				  		    	  <div class="layui-input-block">
+				  		    	  <input type="checkbox" name="honor" lay-filter="honor" value="省部集团级技术能手、五一劳动奖章、劳动模范、先进工作者、标兵荣誉奖章" title="省部集团级技术能手、五一劳动奖章、劳动模范、先进工作者、标兵荣誉奖章 "> 
+				  		    	  </div>
+								  
+								  <div class="layui-input-block">
+								  <input type="checkbox" name="honor" lay-filter="honor" value="国家级技术能手、五一劳动奖章、劳动模范、先进工作者、标兵荣誉奖章" title="国家级技术能手、五一劳动奖章、劳动模范、先进工作者、标兵荣誉奖章 "> 
+								  </div>
+								  
+				  		    	  </form>
+				  		    	</div>
+				  		    </div>
+				  			
+				  		   <div class="layui-tab-item">
+				  		   	<div class="layui-tab-item layui-show">
+				  			  <span style="margin-left: 8%;top: 4%;">
+				  			  						  <p style="margin-left: 8%;top: 4%;">&nbsp;1.国家级奖项，一等奖100分，二等奖80分，三等奖60分、优秀奖或团体奖40分。<br>
+															&nbsp;2.省、部、集团级奖项，一等奖60分，二等奖50分，三等奖40分、优秀奖或团体奖30分。<br>
+															&nbsp;3.地、厅、省公司级奖项，一等奖40分，二等奖35分，三等奖30分。
+				  			  						  <br>
+				  			  						  &nbsp;<i class="layui-icon layui-icon-rate-half"></i>  
+				  			  			   注：参与评定最多三项，同一个竞赛奖项按最高奖项，不重复计算，最高合计100分。</p><br>
+				  			  		  </span>
+				  			  	  <form class="layui-form" action="">
+				  			  	  <div class="layui-input-block">
+				  			  	  <input type="checkbox" lay-filter="skill" name="skill" value="国家级技能竞赛一等奖" title="国家级奖项 一等奖">
+								  <input type="checkbox" lay-filter="skill" name="skill" value="省部集团级技能竞赛一等奖" title="省、部、集团级奖项 一等奖">
+				  			  	  <br>
+				  			  	  </div>
+				  			  	  <div class="layui-input-block">
+				  			  	  <input type="checkbox" lay-filter="skill" name="skill" value="国家级技能竞赛二等奖" title="国家级奖项 二等奖">
+								  <input type="checkbox" lay-filter="skill" name="skill" value="省部集团级技能竞赛二等奖" title="省、部、集团级奖项 二等奖">
+				  			  	  <br>
+				  			  	  </div>
+				  			  	  <div class="layui-input-block">
+				  			  	  <input type="checkbox" lay-filter="skill" name="skill" value="国家级技能竞赛三等奖" title="国家级奖项 三等奖">
+								  <input type="checkbox" lay-filter="skill" name="skill" value="省部集团级技能竞赛三等奖" title="省、部、集团级奖项 三等奖">
+				  			  	  <br>
+				  			  	  </div>
+								  <div class="layui-input-block">
+								  <input type="checkbox" lay-filter="skill" name="skill" value="国家级技能竞赛优秀奖或团体奖" title="国家级奖项 优秀奖/团体奖">
+								  <input type="checkbox" lay-filter="skill" name="skill" value="省部集团级技能竞赛优秀奖或团体奖" title="省、部、集团级奖项 优秀奖/团体奖">
+								  <br>
+								  </div>
+				  			  	  									  
+				  			  	  <div class="layui-input-block">
+				  			  	  <input type="checkbox" lay-filter="skill" name="skill" value="地厅省公司级技能竞赛一等奖" title="地、厅、省公司级奖项 一等奖">
+				  			  	  <br>
+				  			  	  </div>
+				  			  	  <div class="layui-input-block">
+				  			  	  <input type="checkbox" lay-filter="skill" name="skill" value="地厅省公司级技能竞赛二等奖" title="地、厅、省公司级奖项 二等奖">
+				  			  	  <br>
+				  			  	  </div>
+				  			  	  <div class="layui-input-block">
+				  			  	  <input type="checkbox" lay-filter="skill" name="skill" value="地厅省公司级技能竞赛三等奖" title="地、厅、省公司级奖项 三等奖">
+				  			  	  <br>
+				  			  	  </div>
+				  			  	  
+				  			  	  </form>
+				  			  	</div>
+				  			  </div>
+				  			
+				  		    <div class="layui-tab-item">
+				  		    	<div class="layui-tab-item layui-show">
+				  				  <span style="margin-left: 8%;top: 4%;">
+				  				  						  <p style="margin-left: 8%;top: 4%;">&nbsp;1.国家级科技成果奖项，一等奖100分，二等奖90分，三等奖85分。<br>
+																&nbsp;2.省、部、集团级科技成果奖，一等奖60分，二等奖50分，三等奖45分。<br>
+																&nbsp;3.地、厅、省公司级科技成果奖,一等奖30分，二等奖20分，三等奖15分。
+				  				  						  <br>
+				  				  						  &nbsp;<i class="layui-icon layui-icon-rate-half"></i>  
+				  				  			   注：参与评分的成果奖最多三项,，同一个成果按最高奖项，最高合计100分。</p><br>
+				  				  		  </span>
+				  				  <form class="layui-form" >
+				  				  <div class="layui-input-block">
+				  				  <input type="checkbox" lay-filter="technology" name="technology" value="国家级科技成果一等奖" title="国家级科技成果奖项 一等奖">
+				  				  <input type="checkbox" lay-filter="technology" name="technology" value="省部集团级科技成果一等奖" title="省、部、集团级科技成果奖 一等奖">
+				  				  <br>
+				  				  </div>
+				  				  <div class="layui-input-block">
+				  				  <input type="checkbox" lay-filter="technology" name="technology" value="国家级科技成果二等奖" title="国家级科技成果奖项 二等奖">
+				  				  <input type="checkbox" lay-filter="technology" name="technology" value="省部集团级科技成果二等奖" title="省、部、集团级科技成果奖 二等奖">
+				  				  <br>
+				  				  </div>
+				  				  <div class="layui-input-block">
+				  				  <input type="checkbox" lay-filter="technology" name="technology" value="国家级科技成果三等奖" title="国家级科技成果奖项 三等奖">
+				  				  <input type="checkbox" lay-filter="technology" name="technology" value="省部集团级科技成果三等奖" title="省、部、集团级科技成果奖 三等奖">
+				  				  <br>
+				  				  </div>
+				  				  
+				  				  									  
+				  				  <div class="layui-input-block">
+				  				  <input type="checkbox" lay-filter="technology" name="technology" value="地厅省公司级科技成果一等奖" title="地、厅、省公司级科技成果奖 一等奖">
+				  				  <br>
+				  				  </div>
+				  				  <div class="layui-input-block">
+				  				  <input type="checkbox" lay-filter="technology"" name="technology" value="地厅省公司级科技成果二等奖" title="地、厅、省公司级科技成果奖 二等奖">
+				  				  <br>
+				  				  </div>
+				  				  <div class="layui-input-block">
+				  				  <input type="checkbox" lay-filter="technology" name="technology" value="地厅省公司级科技成果三等奖" title="地、厅、省公司级科技成果奖 三等奖">
+				  				  <br>
+				  				  </div>
+				  				  
+				  				  </form>
+				  				</div>
+				  			</div>
+				  				
+				  		    <div class="layui-tab-item">
+				  <div class="layui-tab-item layui-show">
+				  			  <span style="margin-left: 8%;top: 4%;">
+				  			  						  <p style="margin-left: 8%;top: 4%;">&nbsp;获得与本专业相关的国际、国内认证。<br>
+														&nbsp;1.获得国际认证证书高级50分，中级30分，初级20分<br>
+														&nbsp;2.获得国内认证证书高级40分，中级20分，初级10分
+				  			  						  <br>
+				  			  						  &nbsp;<i class="layui-icon layui-icon-rate-half"></i>  
+				  			  			   注：参与评分最多两个认证或资质，同一认证或资质取最高级。</p><br>
+				  			  		  </span>
+				  			  <form class="layui-form" action="">
+				  			  <div class="layui-input-block">
+				  			  <input type="checkbox" lay-filter="professor" value="国际专业认证初级证书" name="professor" title="国际认证证书 初级">
+				  			  <input type="checkbox" lay-filter="professor" value="国际专业认证中级证书" name="professor" title="国际认证证书 中级">
+							  <input type="checkbox" lay-filter="professor" value="国际专业认证高级证书" name="professor" title="国际认证证书 高级">
+				  			  <br>
+				  			  </div>
+				  			  <div class="layui-input-block">
+				  			  <input type="checkbox" lay-filter="professor" value="国内专业认证初级证书" name="professor" title="国内认证证书 初级">
+				  			  <input type="checkbox" lay-filter="professor" value="国内专业认证中级证书" name="professor" title="国内认证证书 中级">
+				  			  <input type="checkbox" lay-filter="professor" value="国内专业认证高级证书" name="professor" title="国内认证证书 高级">
+				  			  <br>
+				  			  </div>
+				  			  
+				  			  </form>
+				              </div>
+				  		  </div>
+						  
+						  <p style="margin-left:30px;font-size:20px;"><i class="layui-icon layui-icon-rate-half"></i>请将所有材料压缩打包后上传，文件以工号+姓名命名！</p>
+				  		  
+						  <input style="margin-left:30px;margin-top:20px" type="file" name="fileName" id="fileName" value="" placeholder="材料上传">
+				  		  <button style="margin-left:30px;margin-top:20px" class="layui-btn" lay-submit type="submit" onclick="postData()">上传</button>
+				  		</div>
+		
+		<div class="layui-tab" style="margin-top: 100px;">
+			 
+		<a name="sub" class="layui-btn layui-btn-lg layui-btn-primary layui-btn-radius con" onclick="submit()">已完成</a>
+			 
+		</div>
+		
+	
+	</body>
+</html>

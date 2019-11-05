@@ -57,12 +57,15 @@ layui.use(['layer', 'form', 'element'], function(){
 		 	  $.ajax({
 				  
 		 	  //几个参数需要注意一下
-		 		// contentType:'application/x-www-form-urlencoded',
-		 		  async: true,//请求是否异步，默认为异步
+		 		  // contentType:'application/x-www-form-urlencoded',
+		 		  async: false,//请求是否异步，默认为异步
 		 		  type: "GET",//方法类型
 		 		  dataType: "json",//预期服务器返回的数据类型
 		 		  url: "http://127.0.0.1:8080/findType" ,//url
 		 		  success: function (result) {
+					  // headers: {
+						 // "content-type": "application/x-www-form-urlencoded"
+					  // },
 		 			  // console.log(JSON.stringify(result.data));//打印服务端返回的数据(调试用)
 					  data=result.data;
 					  console.log(data.length); 
@@ -80,15 +83,19 @@ layui.use(['layer', 'form', 'element'], function(){
 			      form.on('select(type_type)', function(data){ //no是那个lay-filter的值
 					 $("#professionF").empty();
 					 var type=  $('#type_type option:selected').text();
-						console.log(type)
+						console.log("????",type)
 						$.ajax({
+							// headers: {
+							// 	 "content-type": "application/x-www-form-urlencoded",
+							// },
+							// contentType : "application/x-www-form-urlencoded",
 							url: "http://127.0.0.1:8080/findProfessionF" ,//url
-                            type: "get",
+                            type: "GET",
 							dataType : "json",
 							data:{
 								type:type
 							},
-                            contentType : "application/json",
+                            
                             async: false,//同步
                          success: function (result) {
 							
@@ -115,7 +122,7 @@ layui.use(['layer', 'form', 'element'], function(){
 							data:{
 								professionF:professionF
 							},
-                            contentType : "application/json",
+                            contentType : "application/x-www-form-urlencoded",
                             async: false,//同步
                          success: function (result) {
 							
@@ -161,7 +168,7 @@ layui.use(['layer', 'form', 'element'], function(){
 					},
 	                success: function (result) {
 						var id=result.data.id
-						url = "layuiTablePlug/SendM.html?id="+id;//此处跳转到b并且传递参数label
+						url = "userInfo.html?id="+id;//此处跳转到b并且传递参数label
 						window.location.href = url;
 						console.log("111111111111"+JSON.stringify(result));//打印服务端返回的数据(调试用)
 	                },
@@ -173,6 +180,10 @@ layui.use(['layer', 'form', 'element'], function(){
 		 	  return false;
 		 	}
 		})
+		window.logout = function(){
+			window.localStorage.removeItem("token");
+			window.location.href='index.html';
+		}
 	})
 </script>
 </head>
@@ -183,7 +194,7 @@ layui.use(['layer', 'form', 'element'], function(){
   <img src="images/logo.png" class="logo">
   <li class="layui-nav-item left" >
 	  <a href="">
-		  <button class="layui-btn" lay-submit lay-filter="formDemo">退出</button></a></li>
+		  <button class="layui-btn" lay-submit lay-filter="formDemo" onclick="logout()">退出</button></a></li>
 	<!--按钮监听没有设置好-->
 </ul>
 
@@ -221,7 +232,7 @@ layui.use(['layer', 'form', 'element'], function(){
   
 <div class="layui-tab">
 	
-	 <a class="layui-btn layui-btn-lg layui-btn-primary layui-btn-radius con" onclick="submit()" >下一页</a>
+	 <a class="layui-btn layui-btn-lg layui-btn-primary layui-btn-radius con" onclick="submit()">下一页</a>
 </div>	
 	
 	<!--<div id="footer" class="layui-footer footer">
